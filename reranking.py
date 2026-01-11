@@ -1,3 +1,5 @@
+#This script was modified because now results extracted from a list in a dictionary, not directly from a list 
+
 import numpy as np
 from tqdm import tqdm
 import os, argparse
@@ -45,7 +47,9 @@ def main(args):
     for txt_file_query in tqdm(txt_files):
         geo_dists = torch.tensor(get_list_distances_from_preds(txt_file_query))[:num_preds]
         torch_file_query = inliers_folder.joinpath(Path(txt_file_query).name.replace('txt', 'torch'))
-        query_results = torch.load(torch_file_query, weights_only=False)
+        #query_results = torch.load(torch_file_query, weights_only=False)
+        query_data = torch.load(torch_file_query, weights_only=False)
+        query_results = query_data['results']
         query_db_inliers = torch.zeros(num_preds, dtype=torch.float32)
         for i in range(num_preds):
             query_db_inliers[i] = query_results[i]['num_inliers']

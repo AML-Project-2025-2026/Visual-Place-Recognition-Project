@@ -1,3 +1,7 @@
+#This script was modified to compute also the average processing time per query
+
+import time
+
 
 import os
 import sys
@@ -63,13 +67,38 @@ def main(args):
         results = []
         q_path, pred_paths = read_file_preds(txt_file)
         img0 = matcher.load_image(q_path, resize=img_size)
+
+        #
+        query_time = 0.0
         for pred_path in pred_paths[:num_preds]:
             img1 = matcher.load_image(pred_path, resize=img_size)
+            #
+            if device == "cuda":
+                torch.cuda.synchronize()
+            start = time.perf_counter()
             result = matcher(deepcopy(img0), img1)
+            if device == "cuda":
+                torch.cuda.synchronize()
+            end = time.perf_counter()
+            #op
+            query_time += (end - start)
+
             result["all_desc0"] = result["all_desc1"] = None
             results.append(result)
-        torch.save(results, out_file)
+        
+        #
+        avg_time_per_match = query_time / num_preds
+        result_summary = {
+            "avg_time_per_match": avg_time_per_match,
+            "total_query_time": query_time,
+        }
+        #torch.save(results, out_file)
+        torch.save(
+            {"results": results, "timing": result_summary},
+            out_file
+        )
 
 if __name__ == "__main__":
     args = parse_arguments()
     main(args)
+
