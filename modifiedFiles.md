@@ -1,4 +1,4 @@
-# Modified/added files with respect to the original Repository
+# Modified/added files with respect to the original repository
 
 This document lists the files that were modified or added with respect to the original repository, along with a brief description of the changes.
 
