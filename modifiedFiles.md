@@ -2,7 +2,7 @@
 
 This document lists the files that were modified or added with respect to the original repository, along with a brief description of the changes.
 
-## Modified giles
+## Modified files
 
 * **`Visual-Place-Recognition-Project/VPR-methods-evaluation/main.py`**
   Modified to use **dot product** instead of **L2 distance** for similarity computation.
